@@ -1,0 +1,29 @@
+{% extends "pages/base.html" %}
+{% block title %}{{post.title}}{% endblock %}
+{% block content %}
+<h3><a href='{% url 'post' post.id % }'>{{post.title}}</a></h3>
+{% if post.image %}
+    <img src="{{ post.image.url }}" width="500px" height="300px" />
+{% endif %}
+<h6>on {{post.date}}</h6>
+{{post.body|safe|linebreaks}}
+{% for comment in post.comments.all %}
+    <!--in ra tác giả của phần bình luận-->
+    <h4><strong>{{comment.author}}</strong></h4>
+    <!--in ra ngày bình luận-->
+    <h6><p>{{comment.date}}</p></h6>
+    <!--phần bình luận|cho phép xuống dòng-->
+    <p>{{comment.body|linebreaks}}</p>
+{% endfor %}
+<!--kiểm tra có user đăng nhập thì mới hiện ra cái form, còn nếu không đăng nhập thì ko hiện ra-->
+{% if user.username %}
+    <form action="{% url 'post' post.id %}" method='POST'>
+        <!--bảo mật-->
+        {% csrf_token %}
+        <p><label>Bình luận:</label></p>
+        {{form.body}}
+        <br/>
+        <input type="submit" value="Bình luận"/>
+    </form>
+{% endif %}
+{% endblock %}

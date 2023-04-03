@@ -1,0 +1,15 @@
+{% extends "pages/base.html" %}
+{% block title %}Blog{% endblock %}
+{% block content %}
+{% for post in Posts %}
+   <h4>{{post.date|date:"d-m-Y"}}<a href="/blog/{{post.id}}">{{post.title}}</a></h4>
+   {% if post.image %}
+      <img src="{{ post.image.url }}" width="500px" height="300px" />
+   {% endif %}
+{% endfor %}
+<br/>
+<!--nếu page_object.has_next tức là vẫn còn tiếp thì tạo ra thẻ <a -->
+{%if page_object.has_next%}
+   <a href="{{request.path}}?page={{page_object.next_page_number}}">Tiếp theo</a>
+{%endif%}
+{% endblock %}
